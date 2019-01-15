@@ -51,9 +51,9 @@ class Players:
         player_names = soup.find_all('a', {'class': 'player-popup'})
         player_salaries = soup.find_all('span', {'class': 'salary'})
 
-        players = self.scrape_salary(player_names, player_salaries)
+        temp_players = self.scrape_salary(player_names, player_salaries)
 
-        return players
+        return temp_players
 
     def find_roster(self):
         for team in self.teams:
@@ -61,12 +61,20 @@ class Players:
             url = self.urls['roster'].format(id=id)
             page = json.loads(requests.get(url).text)
 
-            #players = self.find_salary()
+            temp_players = self.find_salary()
 
-            #for player in range(0, len(page['roster'])-1):
-            #    players[page['roster'][player]['person']['fullName']] = {'id': page['roster'][player]['person']['id']}
+            players = {}
 
-            #self.players[self.teams[team]['name']] = players                
+            # Checks current lineup and combines the id and salary under the player name
+            for player in range(0, len(page['roster'])-1):
+                if (page['roster'][player]['person']['fullName'] in temp_players):
+                    players[page['roster'][player]['person']['fullName']] = {
+                        'id': page['roster'][player]['person']['id'],
+                        'salary': temp_players[page['roster'][player]['person']['fullName']]
+                    }
+            
+            # Player lineups are put as the value for each team currently playing
+            self.players[self.teams[team]['name']] = players         
 
     def get_roster(self):
         if not self.players:
