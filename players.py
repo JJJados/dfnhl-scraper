@@ -114,6 +114,7 @@ class Players:
                     fpp = self.projected_points(page['roster'][player]['person']['id'])
                     players[page['roster'][player]['person']['fullName']] = {
                         'id': page['roster'][player]['person']['id'],
+                        'position': page['roster'][player]['position']['abbreviation'],
                         'salary': temp_players[page['roster'][player]['person']['fullName']],
                         'fpp': fpp
                     }
