@@ -33,8 +33,14 @@ class Matchups:
         for game in self.games:
             team_num_away = 'team_{}'.format(i)
             team_num_home = 'team_{}'.format(i+1)
-            self.teams[team_num_away] = {'name': self.games[game]['teams']['away']['team']['name'], 'id': self.games[game]['teams']['away']['team']['id']}
-            self.teams[team_num_home] = {'name': self.games[game]['teams']['home']['team']['name'], 'id': self.games[game]['teams']['home']['team']['id']}
+            self.teams[team_num_away] = {
+                                            'name': self.games[game]['teams']['away']['team']['name'], 
+                                            'id': self.games[game]['teams']['away']['team']['id']
+                                        }
+            self.teams[team_num_home] = {
+                                            'name': self.games[game]['teams']['home']['team']['name'], 
+                                            'id': self.games[game]['teams']['home']['team']['id']
+                                        }
             i+=2
 
     def get_teams(self):

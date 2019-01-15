@@ -12,7 +12,7 @@ class TeamSelector:
     def print_players(self):
         self.matchups.find_teams()
         p = players.Players(self.matchups.get_teams())
-        print(p.get_roster())
+        print(p.find_salary())
 
 
 
