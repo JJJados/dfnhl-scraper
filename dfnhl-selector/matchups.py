@@ -60,7 +60,3 @@ class Matchups:
             self.find_teams()
 
         return self.teams
-
-a = Matchups()
-
-a.check_date()

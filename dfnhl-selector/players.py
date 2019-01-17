@@ -1,6 +1,5 @@
 import requests
 import json
-import urllib.request
 import re
 
 from bs4 import BeautifulSoup
@@ -35,7 +34,7 @@ class Players:
         self.salaries = {}
     
     def find_salary(self):
-        page = urllib.request.urlopen(self.urls['salary'])
+        page = requests.get(self.urls['salary']).content
         soup = BeautifulSoup(page, 'html.parser')
 
         player_names = soup.find_all('a', {'class': 'player-popup'})
@@ -91,6 +90,7 @@ class Players:
         for i in range(0, stat_len):
             for key in self.scoring:
                 if (key in page['stats'][0]['splits'][i]['stat']):
+                    # Win/Loss Stat is in string format, thus this check
                     if (key == 'decision'):
                         if (page['stats'][0]['splits'][i]['stat'][key] == 'W'):
                             val = self.scoring[key]
