@@ -1,5 +1,6 @@
 import requests
 import json
+import datetime
 
 class Matchups:
 
@@ -12,6 +13,14 @@ class Matchups:
         self.page = json.loads(requests.get(self.url).text)
         self.games = {}
         self.teams = {}
+
+    def check_date(self):
+        date = datetime.datetime.today().strftime('%Y-%m-%d')
+
+        if (date != self.page['dates'][0]['date']):
+            return False
+            
+        return True
 
     def find_matchups(self):
         for game in range(0, len(self.page['dates'][0]['games'])):
@@ -27,6 +36,9 @@ class Matchups:
     def find_teams(self):
         if not self.games:
             self.find_matchups()
+
+        if not self.check_date():
+            return False
         
         i = 0
 
@@ -34,13 +46,13 @@ class Matchups:
             team_num_away = 'team_{}'.format(i)
             team_num_home = 'team_{}'.format(i+1)
             self.teams[team_num_away] = {
-                                            'name': self.games[game]['teams']['away']['team']['name'], 
-                                            'id': self.games[game]['teams']['away']['team']['id']
-                                        }
+                'name': self.games[game]['teams']['away']['team']['name'], 
+                'id': self.games[game]['teams']['away']['team']['id']
+            }
             self.teams[team_num_home] = {
-                                            'name': self.games[game]['teams']['home']['team']['name'], 
-                                            'id': self.games[game]['teams']['home']['team']['id']
-                                        }
+                'name': self.games[game]['teams']['home']['team']['name'], 
+                'id': self.games[game]['teams']['home']['team']['id']
+            }
             i+=2
 
     def get_teams(self):

@@ -1,6 +1,5 @@
 import requests
 import json
-import urllib.request
 import re
 
 from bs4 import BeautifulSoup
@@ -32,8 +31,15 @@ class Players:
     def __init__(self, teams):
         self.teams = teams
         self.players = {}
+        self.salaries = {}
     
-    def scrape_salary(self, player_names, player_salaries):
+    def find_salary(self):
+        page = requests.get(self.urls['salary']).content
+        soup = BeautifulSoup(page, 'html.parser')
+
+        player_names = soup.find_all('a', {'class': 'player-popup'})
+        player_salaries = soup.find_all('span', {'class': 'salary'})
+
         names = []
         salaries = []
 
@@ -43,6 +49,7 @@ class Players:
             else:
                 names.append(name.text)
         
+        print("\tFinding Player Salaries...")
         for salary in player_salaries:
             if (salary.get("data-salary") is not None):
                 if (salary.get("data-salary") == ""):
@@ -57,19 +64,15 @@ class Players:
                     elif len(sal) == 2:
                         sal = sal[0] + "000"
                         salaries.append(int(sal))
-        
-        return dict(zip(names, salaries))
+        print("\tFound Player Salaries.")
+
+        self.salaries = dict(zip(names, salaries))
     
-    def find_salary(self):
-        page = urllib.request.urlopen(self.urls['salary'])
-        soup = BeautifulSoup(page, 'html.parser')
+    def get_salary(self):
+        if not self.salaries:
+            self.find_salary()
 
-        player_names = soup.find_all('a', {'class': 'player-popup'})
-        player_salaries = soup.find_all('span', {'class': 'salary'})
-
-        temp_players = self.scrape_salary(player_names, player_salaries)
-
-        return temp_players
+        return self.salaries
 
     def projected_points(self, id):
         url = self.urls['gamelog'].format(id=id)
@@ -87,6 +90,7 @@ class Players:
         for i in range(0, stat_len):
             for key in self.scoring:
                 if (key in page['stats'][0]['splits'][i]['stat']):
+                    # Win/Loss Stat is in string format, thus this check
                     if (key == 'decision'):
                         if (page['stats'][0]['splits'][i]['stat'][key] == 'W'):
                             val = self.scoring[key]
@@ -97,14 +101,14 @@ class Players:
 
         return round(fpp/5, 2)
 
-
-    def find_roster(self):
+    def find_lineup(self):
+        print("\tGetting Team Lineups...")
         for team in self.teams:
             id = self.teams[team]['id']
             url = self.urls['roster'].format(id=id)
             page = json.loads(requests.get(url).text)
 
-            temp_players = self.find_salary()
+            temp_players = self.get_salary()
 
             players = {}
 
@@ -114,15 +118,17 @@ class Players:
                     fpp = self.projected_points(page['roster'][player]['person']['id'])
                     players[page['roster'][player]['person']['fullName']] = {
                         'id': page['roster'][player]['person']['id'],
+                        'position': page['roster'][player]['position']['abbreviation'],
                         'salary': temp_players[page['roster'][player]['person']['fullName']],
                         'fpp': fpp
                     }
             
             # Player lineups are put as the value for each team currently playing
-            self.players[self.teams[team]['name']] = players         
+            self.players[self.teams[team]['name']] = players        
+        print("\tFound Team Lineups.") 
 
-    def get_roster(self):
+    def get_lineup(self):
         if not self.players:
-            self.find_roster()
+            self.find_lineup()
 
         return self.players
