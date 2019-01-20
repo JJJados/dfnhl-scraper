@@ -1,7 +1,7 @@
 import matchups
 import players
 
-class TeamSelector:
+class DailyFantasy:
 
     def __init__(self):
         self.lineups = {}
@@ -50,7 +50,7 @@ class TeamSelector:
 
         sorted_values = sorted(values, key=self.getKey)
 
-        print("Top 3 Bargain Players: ")
-        for i in range(0, 3):
+        print("Top 5 Bargain Players: ")
+        for i in range(0, 5):
             print("\t" + str(i+1) + ". "+ sorted_values[i][1] + ", Salary: " + str(sorted_values[i][2]) 
                     + ", Projected Fantasy Point: " + str(sorted_values[i][3]))
