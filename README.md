@@ -8,13 +8,13 @@ This project was intended to explore the use of the NHL API, BeautifulSoup for w
 
 *Currently only support for players last 5 games*
 
-* Daily Fantasy Team Selection 
+* Daily Fantasy Team Selection (Not implemented yet)
 
 * List of Daily Matchups
 
 * List of Team's Lineups
 
-* List of Bargain Player's (fpp/salary)
+* List of Top 3 Bargain Player's (fpp/salary)
 
 ## Some Notes
 

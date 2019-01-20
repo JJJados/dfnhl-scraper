@@ -49,7 +49,7 @@ class Players:
             else:
                 names.append(name.text)
         
-        print("\tFinding Player Salaries...")
+        print("Finding Player Salaries...")
         for salary in player_salaries:
             if (salary.get("data-salary") is not None):
                 if (salary.get("data-salary") == ""):
@@ -64,7 +64,7 @@ class Players:
                     elif len(sal) == 2:
                         sal = sal[0] + "000"
                         salaries.append(int(sal))
-        print("\tFound Player Salaries.")
+        print("Found Player Salaries.")
 
         self.salaries = dict(zip(names, salaries))
     
@@ -102,7 +102,7 @@ class Players:
         return round(fpp/5, 2)
 
     def find_lineup(self):
-        print("\tGetting Team Lineups...")
+        print("Getting Team Lineups...")
         for team in self.teams:
             id = self.teams[team]['id']
             url = self.urls['roster'].format(id=id)
@@ -125,7 +125,7 @@ class Players:
             
             # Player lineups are put as the value for each team currently playing
             self.players[self.teams[team]['name']] = players        
-        print("\tFound Team Lineups.") 
+        print("Found Team Lineups.\n") 
 
     def get_lineup(self):
         if not self.players:
