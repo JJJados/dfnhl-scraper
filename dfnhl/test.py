@@ -5,8 +5,17 @@ def main():
     fantasy.setup()
 
     fantasy.print_matchups()
-    fantasy.print_lineup("Edmonton Oilers")
+    #print()
+    #fantasy.print_lineup("Calgary Flames")
+    print()
     fantasy.bargain_players()
+    print()
+    fantasy.get_scoring_leaders()
+    fantasy.leading_goals()
+    print()
+    fantasy.leading_assists()
+    print()
+    fantasy.leading_scorers()
 
 if __name__ == "__main__":
     main()

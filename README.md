@@ -12,14 +12,15 @@ This project was intended to explore the use of the NHL API, BeautifulSoup for w
 
 * List of Team's Lineups
 
-* List of Top 5 Bargain Player's (fpp/salary)
+* List of Top 5 Daily Bargain Player's (fpp/salary)
+
+* List of Top 5 Daily Goal/Assist/Point Leading Players
 
 ## Some Notes
 
 Future updates to this project is to provide a model for team selection. This can be done by taking advantage of the NHL API to it's fullest capabilities by using players stats from previous seasons to find trends in their play, teams performance, and weighting these stats . Due to University and other projects these changes may take more time to implement, but provided I maintain playing Daily Fantasy Hockey my interest will continue to be improving the team selection model and providing a more analytically accurate team.
 
 Features that may be implemented:
-* Top 5 Players (current season)
 * Daily Fantasy Team Selection 
 
 ## Credits
