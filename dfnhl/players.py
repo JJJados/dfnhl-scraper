@@ -8,6 +8,7 @@ class Players:
 
     urls = {
         'gamelog': 'https://statsapi.web.nhl.com/api/v1/people/{id}/stats?stats=gameLog&season=20182019',
+        'stats': 'https://statsapi.web.nhl.com/api/v1/people/{id}/stats?stats=statsSingleSeason&season=20182019',
         'team': 'https://statsapi.web.nhl.com/api/v1/teams/{id}',
         'roster': 'https://statsapi.web.nhl.com/api/v1/teams/{id}/roster',
         'salary': 'https://rotogrinders.com/lineups/nhl?site=fanduel'
@@ -116,11 +117,32 @@ class Players:
             for player in range(0, len(page['roster'])-1):
                 if (page['roster'][player]['person']['fullName'] in temp_players):
                     fpp = self.projected_points(page['roster'][player]['person']['id'])
+
+                    stat_url = self.urls['stats'].format(id=page['roster'][player]['person']['id'])
+                    stat_page = json.loads(requests.get(stat_url).text)
+
+                    #print(page['roster'][player]['person']['id'])
+
+                    if ('goals' in stat_page['stats'][0]['splits'][0]['stat']):
+                        goals = stat_page['stats'][0]['splits'][0]['stat']['goals']
+                    else:
+                        goals = 0
+
+                    if ('assists' in stat_page['stats'][0]['splits'][0]['stat']):
+                        assists = stat_page['stats'][0]['splits'][0]['stat']['assists']
+                    else:
+                        assists = 0
+                    
+                    #print(stat_page['stats'][0]['splits'][0]['stat']['goals'])
+
                     players[page['roster'][player]['person']['fullName']] = {
                         'id': page['roster'][player]['person']['id'],
                         'position': page['roster'][player]['position']['abbreviation'],
                         'salary': temp_players[page['roster'][player]['person']['fullName']],
-                        'fpp': fpp
+                        'fpp': fpp,
+                        'goals': goals,
+                        'assists': assists,
+                        'points': goals + assists
                     }
             
             # Player lineups are put as the value for each team currently playing
