@@ -11,11 +11,7 @@ def main():
     fantasy.bargain_players()
     print()
     fantasy.get_scoring_leaders()
-    fantasy.leading_goals()
-    print()
-    fantasy.leading_assists()
-    print()
-    fantasy.leading_scorers()
+    fantasy.print_all_leaders()
 
 if __name__ == "__main__":
     main()

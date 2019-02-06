@@ -18,6 +18,10 @@ class DailyFantasy:
         self.players = players.Players(self.teams)
         self.lineups = self.players.get_lineup()
 
+        self.all_goal = []
+        self.all_assist = []
+        self.all_point = []
+
         self.goal_leaders = []
         self.assist_leaders = []
         self.point_leaders = []
@@ -75,36 +79,63 @@ class DailyFantasy:
                 assist_leaders.append([assists, player, points, fpp])
                 point_leaders.append([points, player, goals, assists, fpp])
         
-        self.goal_leaders = sorted(goal_leaders, key=self.getKey)
-        self.assist_leaders = sorted(assist_leaders, key=self.getKey)
-        self.point_leaders = sorted(point_leaders, key=self.getKey)
+        self.all_goal = sorted(goal_leaders, key=self.getKey)
+        self.all_assist = sorted(assist_leaders, key=self.getKey)
+        self.all_point = sorted(point_leaders, key=self.getKey)
 
-    def leading_goals(self):
+        self.goal_leaders = self.all_goal[len(self.all_goal)-1:len(self.all_goal)-6:-1]
+        self.assist_leaders = self.all_assist[len(self.all_assist)-1:len(self.all_assist)-6:-1]
+        self.point_leaders = self.all_point[len(self.all_point)-1:len(self.all_point)-6:-1]
+
+    def get_all_goals(self):
+        return self.all_goal
+
+    def get_all_assists(self):
+        return self.all_assist
+
+    def get_all_points(self):
+        return self.all_point
+
+    def print_all_leaders(self):
+        self.print_leading_goals()
+        self.print_leading_assists()
+        self.print_leading_points()
+
+    def print_leading_goals(self):
         val = 1
 
         print("Top 5 Goal Leaders")
-        for i in range(len(self.goal_leaders)-1, len(self.goal_leaders)-6, -1):
+        for i in range(0, len(self.goal_leaders)-1):
             print("\t" + str(val) + ". "+ self.goal_leaders[i][1] + ", Goals: " + str(self.goal_leaders[i][0]) 
                     + ", Total Points: " + str(self.goal_leaders[i][2])
                     + ", Projected Fantasy Point (last 5 games): " + str(self.goal_leaders[i][3]))
             val+=1
 
-    def leading_assists(self):
+    def get_leading_goals(self):
+        return self.goal_leaders
+
+    def print_leading_assists(self):
         val = 1
 
         print("Top 5 Assist Leaders")
-        for i in range(len(self.assist_leaders)-1, len(self.assist_leaders)-6, -1):
+        for i in range(0, len(self.assist_leaders)-1):
             print("\t" + str(val) + ". "+ self.assist_leaders[i][1] + ", Assists: " + str(self.assist_leaders[i][0]) 
                     + ", Total Points: " + str(self.assist_leaders[i][2])
                     + ", Projected Fantasy Point (last 5 games): " + str(self.assist_leaders[i][3]))
             val+=1
+
+    def get_leading_assists(self):
+        return self.assist_leaders
     
-    def leading_scorers(self):
+    def print_leading_points(self):
         val = 1
 
         print("Top 5 Leading Scorers")
-        for i in range(len(self.point_leaders)-1, len(self.point_leaders)-6, -1):
+        for i in range(0, len(self.point_leaders)-1):
             print("\t" + str(val) + ". "+ self.point_leaders[i][1] + ", Points: " + str(self.point_leaders[i][0]) 
                     + ", Goals: " + str(self.point_leaders[i][2]) + ", Assists: " + str(self.point_leaders[i][3])
                     + ", Projected Fantasy Point (last 5 games): " + str(self.point_leaders[i][4]))
             val+=1
+
+    def get_leading_points(self):
+        return self.point_leaders
